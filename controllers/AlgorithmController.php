@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\BinarySearch;
+use app\models\SelectionSort;
 use yii\base\Controller;
 
 class AlgorithmController extends Controller
@@ -19,6 +20,15 @@ class AlgorithmController extends Controller
         $binary_search->item = 712;
         echo sprintf('Index: %s<br>', $binary_search->search());
         echo sprintf('Steps: %s', $binary_search->getSteps());
+        die;
+    }
+
+    public function actionSelectionSort()
+    {
+        $selection_sort = new SelectionSort();
+        $selection_sort->setList([3,1,4,6,10,8,2]);
+        echo sprintf('Array: <pre>%s</pre><br>', json_encode($selection_sort->getList(), JSON_PRETTY_PRINT));
+        echo sprintf('Sorted: <pre>%s</pre><br>', json_encode($selection_sort->sort(), JSON_PRETTY_PRINT));
         die;
     }
 }
