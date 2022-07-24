@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\BinarySearch;
 use app\models\EuclideanAlgorithm;
+use app\models\QuickSort;
 use app\models\SelectionSort;
 use yii\base\Controller;
 
@@ -39,5 +40,16 @@ class AlgorithmController extends Controller
         $euclidean_algorithm->setNumbers(1071, 462);
         echo sprintf('GCD (greatest common divisor): %s<br>', $euclidean_algorithm->getGcd());
         die;
+    }
+
+    public function actionQuickSort()
+    {
+        $quick_sort = new QuickSort();
+        $quick_sort->setList([4,1,22,3,10,2]);
+
+        return json_encode([
+            'array' => $quick_sort->getList(),
+            'sorted' => $quick_sort->sort(),
+        ]);
     }
 }
