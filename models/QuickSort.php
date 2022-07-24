@@ -30,10 +30,12 @@ class QuickSort
     protected function qSort(array $array): array
     {
         if (count($array) < 2) return $array;
-        $opornyi_element = $array[0];
+        $rand_index = rand(1, (sizeof($array)-1));
+        $opornyi_element = $array[$rand_index];
         $less = []; $greater = [];
 
-        foreach (array_slice($array, 1) as $item) {
+        foreach ($array as $index => $item) {
+            if ($index === $rand_index) continue;
             if ($item < $opornyi_element) $less[] = $item;
             else $greater[] = $item;
         }
