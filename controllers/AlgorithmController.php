@@ -52,4 +52,31 @@ class AlgorithmController extends Controller
             'sorted' => $quick_sort->sort(),
         ]);
     }
+
+    public function actionGraph()
+    {
+        $graph = [];
+        $graph['you'] = ['alice', 'bob', 'claire'];
+        $graph['alice'] = ['peggy'];
+        $graph['bob'] = ['anuj', 'peggy'];
+        $graph['claire'] = ['thom', 'johnny'];
+        $graph['peggy'] = [];
+        $graph['anuj'] = [];
+        $graph['thom'] = [];
+        $graph['johnny'] = [];
+
+        $search_queue = new \Ds\Deque(...[$graph['you']]);
+        $searched = [];
+
+        while (!$search_queue->isEmpty()) {
+            $user = $search_queue->shift();
+
+            if ($user === 'thom') return "Mango seller found: $user";
+            $searched[] = $user;
+            $search_queue->push(...array_filter($graph[$user], function ($name) use ($searched) { return !in_array($name, $searched); }));
+            $searched = array_merge($searched, array_filter($graph[$user], function ($name) use ($searched) { return !in_array($name, $searched); }));
+        }
+
+        return "Mango seller not found";
+    }
 }
