@@ -53,7 +53,7 @@ class AlgorithmController extends Controller
         ]);
     }
 
-    public function actionGraph()
+    public function actionBreadthFirstSearch()
     {
         $graph = [];
         $graph['you'] = ['alice', 'bob', 'claire'];
