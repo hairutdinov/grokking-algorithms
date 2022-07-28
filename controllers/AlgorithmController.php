@@ -70,11 +70,11 @@ class AlgorithmController extends Controller
 
         while (!$search_queue->isEmpty()) {
             $user = $search_queue->shift();
-
+            if (in_array($user, $searched)) continue;
             if ($user === 'thom') return "Mango seller found: $user";
             $searched[] = $user;
-            $search_queue->push(...array_filter($graph[$user], function ($name) use ($searched) { return !in_array($name, $searched); }));
-            $searched = array_merge($searched, array_filter($graph[$user], function ($name) use ($searched) { return !in_array($name, $searched); }));
+            $search_queue->push(...$graph[$user]);
+            $searched[] = $user;
         }
 
         return "Mango seller not found";
