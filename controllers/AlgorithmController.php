@@ -79,4 +79,72 @@ class AlgorithmController extends Controller
 
         return "Mango seller not found";
     }
+
+    public function actionDijkstrasAlgorithm()
+    {
+        $graph = [];
+        $graph['start']['a'] = 6;
+        $graph['start']['b'] = 2;
+        $graph['a']['finish'] = 1;
+        $graph['b']['a'] = 3;
+        $graph['b']['finish'] = 5;
+        $graph['finish'] = [];
+
+        $infinity = INF;
+
+        $costs = [];
+        $costs['a'] = 6;
+        $costs['b'] = 2;
+        $costs['finish'] = $infinity;
+
+        $parents = [];
+        $parents['a'] = 'start';
+        $parents['b'] = 'start';
+        $parents['finish'] = null;
+
+        $processed = [];
+
+        $node = $this->find_lowest_cost_mode($costs, $processed);
+
+        while (!is_null($node)) { // while node not null
+            $cost = $costs[$node];
+            $neighbors = $graph[$node];
+
+            foreach (array_keys($neighbors) as $n) {
+                $new_cost = $cost + $neighbors[$n];
+
+                if ($costs[$n] > $new_cost) {
+                    $costs[$n] = $new_cost;
+                    $parents[$n] = $node;
+                }
+            }
+
+            $processed[] = $node;
+            $node = $this->find_lowest_cost_mode($costs, $processed);
+        }
+
+        echo sprintf('<pre>%s</pre><br>', json_encode($costs, JSON_PRETTY_PRINT));die;
+    }
+
+
+    /**
+     * @param array $costs
+     * @param array $processed
+     * @return string|null
+     */
+    public function find_lowest_cost_mode(array $costs, array $processed)
+    {
+        $infinity = INF;
+        $lowest_cost = $infinity;
+        $lowest_cost_node = null;
+
+        foreach ($costs as $node => $cost) {
+            if ($cost < $lowest_cost && !in_array($node, $processed)) {
+                $lowest_cost = $cost;
+                $lowest_cost_node = $node;
+            }
+        }
+
+        return $lowest_cost_node;
+    }
 }
