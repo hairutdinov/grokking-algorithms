@@ -147,4 +147,34 @@ class AlgorithmController extends Controller
 
         return $lowest_cost_node;
     }
+
+    public function actionSetCoveringProblem()
+    {
+        $states_needed = array_unique(['mt', 'wa', 'or', 'id', 'nv', 'ut', 'ca', 'az']); // типо множества
+
+        $stations = [];
+        $stations['kone'] = array_unique(['id', 'nv', 'ut']);
+        $stations['ktwo'] = array_unique(['wa', 'id', 'mt']);
+        $stations['kthree'] = array_unique(['or', 'nv', 'ca']);
+        $stations['kfour'] = array_unique(['nv', 'ut']);
+        $stations['kfive'] = array_unique(['ca', 'az']);
+
+        $final_stations = []; // итоговый набор станций
+
+        while ($states_needed) {
+            $best_station = null;
+            $states_covered = []; // все штаты, обслуживаемые станцией, которые не входят в покрытие
+
+            foreach ($stations as $station => $states_for_station) {
+                $covered = array_intersect($states_needed, $states_for_station);
+                if (sizeof($covered) > sizeof($states_covered)) {
+                    $best_station = $station;
+                    $states_covered = $covered;
+                }
+            }
+
+            $final_stations[] = $best_station;
+            $states_needed = array_diff($states_needed, $states_covered);
+        }
+    }
 }
